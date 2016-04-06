@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "setwd(\"C:/Users/Koohoko/Desktop/roaming/work/本科毕业设计/time\")\n#import case data\ncasedata <- read.table('case.txt')\nnames(casedata) <- c('date','GOPC','GP')\nstr(casedata)\ncasedata[,1]\n#change the first col to date format\n\n#import meteorological data\nfor(i in 2010:2016){\n      name = paste0(i,'.csv')\n      assign(paste0('data,', i), read.csv(name,header = F))\n}\n      \n",
+    "created" : 1459934698246.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4042981382",
+    "id" : "1A87DD18",
+    "lastKnownWriteTime" : 1459936166,
+    "last_content_update" : 1459936179538,
+    "path" : "C:/Users/Koohoko/Desktop/roaming/work/本科毕业设计/Time-series-analysis/meteorological data cleanning.R",
+    "project_path" : "meteorological data cleanning.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

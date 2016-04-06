@@ -12,4 +12,3 @@ for(i in 2010:2016){
       assign(paste0('data,', i), read.csv(name,header = F))
 }
       
-      
