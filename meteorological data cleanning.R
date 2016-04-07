@@ -64,4 +64,4 @@ medata$Date <- as.Date(seq, origin = "1970-01-01")
 
 ##save csv
 write.csv(medata,'medata.csv')
-
+summary(medata)
