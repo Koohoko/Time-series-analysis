@@ -109,7 +109,7 @@ pacf(diff(log286, 52), lag.max = 260)
 acf(diff(diff(log286, 52)), lag.max = 260 )
 pacf(diff(diff(log286, 52)), lag.max = 260)
 
-sfit <- arima(log286, c(0, 1, 2), seasonal = list(order = c(0, 1, 1), period = 52))
+sfit <- arima(log286, c(0, 1, 2), seasonal = list(order = c(0, 1, 2), period = 52))
 tsdiag(sfit)
 summary(sfit)
 (1-pnorm(abs(sfit$coef)/sqrt(diag(sfit$var.coef))))*2#P-value
