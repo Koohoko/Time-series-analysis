@@ -34,7 +34,7 @@ length(rainfall)
 #making time series objects
 GPcasets <- ts(GPcase[1:260],frequency = 52,start = 2010)
 # summary(GPcasets)
-# plot(GPcasets)
+plot(GPcasets)
 # abline(reg=lm(GPcasets~time(GPcasets)))
 # cycle(GPcasets)
 # plot(aggregate(GPcasets,FUN=mean))
@@ -88,16 +88,20 @@ pacf(diff(logGPcasets))
 #predict the last half year
 log286 <- ts(log(GPcase[1:286]),frequency = 52,start = 2010)
 GPcase286 <- ts(GPcase[1:286],frequency = 52,start = 2010)
-acf(diff(log286),lag.max = 286)
-pacf(diff(log286))
+plot(GPcase286,xlab='时间', ylab = '周均ILI病例相对值（‰）')
+adf.test(log286, alternative="stationary", k=0)
+acf(log286,main = '', xlab = '滞次', ylab='自相关系数')
+adf.test(diff(log286), alternative="stationary", k=0)
+acf(diff(log286),main = '', xlab = '滞次', ylab='自相关系数')
+pacf(diff(log286),main = '', xlab = '滞次', ylab='偏自相关系数')
 
 #ARIMA
-fit <- arima(log286,c(2,1,2))
+fit <- arima(log286,c(3,0,0))
 tsdiag(fit)
 summary(fit)
 (1-pnorm(abs(fit$coef)/sqrt(diag(fit$var.coef))))*2#P-value
 pred <- predict(fit, n.ahead = 26)
-ts.plot(ts(GPcase[1:312],frequency = 52,start = 2010),exp(pred$pred), log = "y", lty = c(1,1), col = c(1,2))
+ts.plot(ts(GPcase[1:312],frequency = 52,start = 2010),exp(pred$pred), lty = c(1,1), col = c(1,2))
 rmse(pred$pred, log(GPcase[287:312]))
 #sqrt(mean((pred$pred-log(GPcase[261:312]))^2))
 
@@ -115,5 +119,24 @@ summary(sfit)
 (1-pnorm(abs(sfit$coef)/sqrt(diag(sfit$var.coef))))*2#P-value
 
 spred <- predict(sfit, n.ahead = 26)
-ts.plot(ts(GPcase[1:312],frequency = 52,start = 2010),exp(spred$pred), log = "y", lty = c(1,1), col = c(1,2))
+ts.plot(ts(GPcase[1:312],frequency = 52,start = 2010),exp(spred$pred), lty = c(1,1), col = c(1,2),xlab='时间', ylab = '周均ILI病例相对值（‰）')
+legend('bottomright',c('观察值','预测值'),lty = c(1,1), col = c(1,2))
 rmse(spred$pred, log(GPcase[287:312]))
+
+spred011 <- spred
+spred012 <- spred
+
+spred011
+GPcase[287:312] - exp(spred011$pred)
+
+GPcase[287:312] - exp(spred012$pred)
+
+t.test(GPcase[287:312] - exp(spred011$pred),GPcase[287:312] - exp(spred012$pred))
+
+#t test
+arima_rmse <- c(0.1906,0.1944,0.1916,0.1929,0.1911)
+sarima_rmse <- c(0.1840,0.1859,0.1840,0.1869)
+t.test(arima_rmse,sarima_rmse)
+arimap_rmse <- c(0.1582,0.1522,0.1585,0.1492,0.1652)
+sarimap_rmse <- c(0.1418,0.1413,0.1306,0.1296)
+t.test(arimap_rmse,sarimap_rmse)
